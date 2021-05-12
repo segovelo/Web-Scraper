@@ -25,3 +25,35 @@ for x in range(1,6):
             productlinks.append(baseurl + link)
 
 print(len(productlinks))
+
+data=[]
+for link in productlinks:
+    f = requests.get(link,headers=headers).text
+    hun=BeautifulSoup(f,'html.parser')
+
+    try:
+        price=hun.find("p",{"class":"product-action__price"}).text.replace('\n',"")
+    except:
+        price = None
+
+    try:
+        about=hun.find("div",{"class":"product-main__description"}).text.replace('\n',"")
+    except:
+        about=None
+
+    try:
+        rating = hun.find("div",{"class":"review-overview"}).text.replace('\n',"")
+    except:
+        rating=None
+
+    try:
+        name=hun.find("h1",{"class":"product-main__name"}).text.replace('\n',"")
+    except:
+        name=None
+
+    whisky = {"name":name,"price":price,"rating":rating,"about":about}
+
+    data.append(whisky)
+    
+df = pd.DataFrame(data)
+print(df)
