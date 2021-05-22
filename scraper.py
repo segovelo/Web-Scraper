@@ -11,8 +11,10 @@ import pandas as pd
 
 baseurl = "https://www.thewhiskyexchange.com"
 headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.82 Safari/537.36'}
-
 productlinks = []
+t={}
+data=[]
+c=0
 for x in range(1,6):
     k = requests.get('https://www.thewhiskyexchange.com/c/35/japanese-whisky?pg={}&psize=24&sort=pasc'.format(x)).text  
     soup=BeautifulSoup(k,'html.parser')
@@ -26,7 +28,7 @@ for x in range(1,6):
 
 print(len(productlinks))
 
-data=[]
+
 for link in productlinks:
     f = requests.get(link,headers=headers).text
     hun=BeautifulSoup(f,'html.parser')
@@ -54,6 +56,7 @@ for link in productlinks:
     whisky = {"name":name,"price":price,"rating":rating,"about":about}
 
     data.append(whisky)
-    
+    c=c+1
+    print("Completed ", c)
 df = pd.DataFrame(data)
 print(df)
